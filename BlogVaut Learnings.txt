@@ -1,0 +1,22 @@
+
+## About Company
+		Core -> Backup / Restore / Migration / Staging / Manage -> multiple
+		Malware -> scanner / cleaner -> Sumit
+		Firewall -> fw, lp, bot protection -> Ankit
+		UI -> Aakash
+		Infra / Dev Ops
+## moto ->
+	-Easy to use
+	-One click philosophy
+	-less technichal headech to user.
+	- code - readable, maintainable, extensible
+
+
+## Ruby
+	- class name convention - CamelCase
+	- it has acces specifier
+	- def to_s
+      "(w:#@width,h:#@height)"  # string formatting of the object.
+   	  end	
+   	- 
+
