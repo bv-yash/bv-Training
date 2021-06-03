@@ -1,4 +1,5 @@
-load 'Node.rb'
+require_relative 'Node'
+require 'json'
 
 class TreeNode < Node
 
@@ -13,19 +14,21 @@ end
 
 
 class BinarySearchTree
+
+    attr_accessor :root
     
     def initialize
         @root = nil
     end
 
     def insert(value)
-        if @root == nil
+        if @root.nil?
             @root = TreeNode.new(value)
         else
             curr_node = @root
             previous_node = @root
 
-            while curr_node != nil
+            until curr_node.nil?
                 previous_node = curr_node
                 if value <= curr_node.value
                     curr_node = curr_node.left
@@ -86,11 +89,11 @@ class BinarySearchTree
     end
 
     def level_order(root)
-        return if root.nil?
+        return [] if root.nil?
         
         result = []
         que = Queue.new
-        que.push @root
+        que.push root
         level = 0
         puts
 
@@ -119,7 +122,7 @@ class BinarySearchTree
         return if @root.nil?
 
         curr_node = @root
-        while curr_node.left != nil
+        until curr_node.left.nil?
             curr_node = curr_node.left
         end
 
@@ -130,7 +133,7 @@ class BinarySearchTree
         return if @root.nil?
 
         curr_node = @root
-        while curr_node.right != nil
+        until curr_node.right.nil?
             curr_node = curr_node.right
         end
 
@@ -140,7 +143,7 @@ class BinarySearchTree
     def search(key)
         curr_node = @root
 
-        while curr_node != nil do
+        until curr_node.nil?
             return true if curr_node.value == key 
 
             if curr_node.value < key
@@ -154,16 +157,16 @@ class BinarySearchTree
     end
 
     def remove(key)
-        @root = remove_helper(key, @root)
+        @root = remove_helper(@root, key)
     end
 
-    def remove_helper(key, node)
+    def remove_helper(node, key)
         return nil if node.nil?
         
         if node.value < key
-            node.right = remove_helper(key, node.right)
+            node.right = remove_helper(node.right, key)
         elsif node.value > key
-            node.left = remove_helper(key, node.left)
+            node.left = remove_helper(node.left, key)
         else
             if node.left.nil? and node.right.nil? #no child
                 node = nil
@@ -174,7 +177,7 @@ class BinarySearchTree
             else                     # 2 child
                 max_in_left_subtree = find_largest(node.left)
                 node.value = max_in_left_subtree
-                node.right = remove_helper(max_in_left_subtree, node.right)
+                node.right = remove_helper(node.right, max_in_left_subtree)
             end
         end
 
@@ -207,12 +210,12 @@ class BinarySearchTree
     def print_paths(paths)
         puts 'Printing All path from root to leaf...'
         paths.each_with_index do |path, idx|
+            path_size = path.length
             print 'Path ', idx+1, ' : '
-            for val in path
-                print val, ' => '
+            for idx in (0..path_size-2)
+                print path[idx], ' => '
             end
-            print 'nil'
-            puts
+            puts path[path_size-1]
         end
     end
 
@@ -220,25 +223,35 @@ class BinarySearchTree
         @root = nil
     end
 
-    def load(filename)
-        begin
-            file = File.open("#{filename}")    
-            data = file.read
-            file.close
-            
-            elements = data.split(',').map { |elem| elem.to_i}
-    
-            clear
-            elements.each do |elem|
-                insert elem
-            end 
-            puts 'File Loaded Sucessfully...'
-        rescue 
-            puts 'No Such file present.'
+    def is_valid_file(values)
+        return false unless values.class == Array
+        values.each do |elem|
+            return false unless elem.class == Integer
         end
+        true
+    end
+    
+    def load(filename)
+        filename = "#{filename}.json"
+    
+        return puts 'No Such file present.' if !File.exist?(filename)
+        begin
+            data = File.read(filename)    
+            elements = JSON.parse(data)    
+        rescue JSON::ParserError => exception
+            return puts "InValid Json File."
+        end
+    
+        return puts "InValid Values in file." unless is_valid_file(elements)
+        clear
+        elements.each do |elem|
+            insert elem
+        end 
+        puts 'File Loaded Sucessfully...'
     end
     
     def save(filename)
+        filename = "#{filename}.json"
         print 'Current Tree =>'
         result = level_order(@root)
 
@@ -249,14 +262,9 @@ class BinarySearchTree
             end
         end
 
-        File.open("#{filename}", 'w') { |file|
-            length = arr.length
-            for idx in (0..length-2)
-                file << arr[idx]
-                file << ','
-            end
-            file << arr[length-1]
-        }
+        File.open("#{filename}", 'w') do |file|
+            file.write(arr.to_json)
+        end
         puts "Tree saved as #{filename}"
     end
 
