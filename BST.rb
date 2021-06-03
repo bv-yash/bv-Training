@@ -1,13 +1,13 @@
+load 'Node.rb'
 
+class TreeNode < Node
 
-class TreeNode
-
-    attr_accessor :value, :left, :right
+    attr_accessor :left, :right
 
     def initialize(value = nil, left = nil, right = nil)
-      @value = value
-      @left = left
-      @right = right
+        super value
+        @left = left
+        @right = right
     end
 end
 
@@ -17,6 +17,7 @@ class BinarySearchTree
     def initialize()
         @root = nil
     end
+
 
     def insert(value)
         if @root == nil
@@ -255,10 +256,10 @@ class BinarySearchTree
 
     def load()
         print "Enter file name : "
-        name = gets.chomp
+        filename = gets.chomp
     
         begin
-            file = File.open("#{name}.txt")    
+            file = File.open("#{filename}")    
             data = file.read
             file.close
             
@@ -280,12 +281,12 @@ class BinarySearchTree
     
     def save()
         print "Name your file to save : "
-        name = gets.chomp
+        filename = gets.chomp
         
         print 'Current Tree =>'
         result = level_order(@root)
     
-        File.open("#{name}.txt", 'w') { |file|
+        File.open("#{filename}", 'w') { |file|
             result.each do |level|
                 level.each do |value|
                     file << value
@@ -302,110 +303,4 @@ class BinarySearchTree
     end
 
 end
-
-
-
-def show_oprations
-    puts "
-    1  => Add elements into the tree(multiple elements comma separated)
-    2  => Print the largest element
-    3  => Print the smallest element
-    4  => Print Inorder, postorder, level order, and preorder traversal 
-    5  => Search an element
-    6  => Remove an element
-    7  => Print all the paths i.e starting from root to the leaf
-    8  => load BST from file.
-    9  => Save Tree
-    10 => Quit
-    "
-end
-
-def run_script(tree, user_input)
-    return puts "Tree is empty" if tree.empty? and user_input != "1"  and user_input != "8" and user_input > 10
-
-    case user_input
-    when "1"
-        puts "Please enter elemets."
-        elements = gets.chomp.split(',').map { |elem| elem.to_i }
-
-        elements.each do |elem|
-            tree.insert elem
-        end 
-        puts "Elements inserted successfully."
-
-    when "2"
-        puts "Largest Element : #{tree.find_largest}"
-
-    when "3"
-        puts "Smallest Element : #{tree.find_smallest}"
-
-    when "4"
-        tree.traverse()
-    
-    when "5"
-        print "Enter the value of element : "
-
-        key = gets.chomp.to_i
-
-        if tree.search(key)
-            puts "Element Found."
-        else
-            puts "Element not found !!!"
-        end
-
-    when "6"
-        print "Enter the value of element : "
-
-        elem = gets.chomp.to_i
-
-        tree.remove(elem)
-        puts "#{elem} deleted successfully."
-
-    when "7"
-        tree.all_path_from_root_to_leaf
-
-    when "8"
-        tree.load
-
-    when "9"
-        tree.save
-
-    else
-        puts 'Invalid Input !!!'
-    end
-end
-
-
-def main
-
-    tree = BinarySearchTree.new()
-
-    while true
-
-        show_oprations
-
-        user_input = gets.chomp
-        if user_input == 'q' or user_input == 'quit' or user_input == '10'
-            tree.save
-            break
-        end
-            
-        run_script(tree, user_input)
-
-        puts "Press enter to continue." 
-        gets
-        
-        system('clear')
-    end
-
-    puts 'Thank You!'
-end
-
-
-main
-
-
-
-
-
 
