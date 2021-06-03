@@ -74,13 +74,17 @@ def run_bst_script(tree, user_input)
         filename = gets.chomp
         tree.load filename
     when BstOperation::SAVE
+        return puts 'Tree is Empty' if tree.empty?
+
         print 'Please enter file name : '
         filename = gets.chomp
-        tree.save filename
+        tree.save(filename)
     when BstOperation::QUIT
+        return puts 'Thank You!!!' if tree.empty?
+
         print 'Please enter file name to save : '
         filename = gets.chomp
-        tree.save filename
+        tree.save(filename)
         puts 'Thank You!!!'
     else
         puts 'Invalid Input !!!'
@@ -100,8 +104,8 @@ def main_BST
         puts "Press enter to continue." 
         gets
         system('clear')
-    
-    break if user_input == BstOperation::QUIT or user_input == 'quit'
+
+    break if user_input == 'quit' or user_input.to_i == BstOperation::QUIT
     end
 
 end
