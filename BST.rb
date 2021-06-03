@@ -254,9 +254,7 @@ class BinarySearchTree
     end
 
 
-    def load()
-        print "Enter file name : "
-        filename = gets.chomp
+    def load(filename)
     
         begin
             file = File.open("#{filename}")    
@@ -279,9 +277,7 @@ class BinarySearchTree
         end
     end
     
-    def save()
-        print "Name your file to save : "
-        filename = gets.chomp
+    def save(filename)
         
         print 'Current Tree =>'
         result = level_order(@root)
