@@ -12,7 +12,6 @@ class TreeNode < Node
     end
 end
 
-
 class BinarySearchTree
 
     attr_accessor :root
@@ -271,5 +270,4 @@ class BinarySearchTree
     def empty?
         return  @root.nil?
     end
-
 end
