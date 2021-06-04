@@ -2,48 +2,50 @@ require 'json'
 
 class Node
 
-    attr_accessor :value
+        attr_accessor :value
 
-    def initialize(value = nil)
-        @value = value
-    end
+        def initialize(value = nil)
+                @value = value
+        end
 end
 
 class DataStructures
 
-    def save(filename)
-        filename = "#{filename}.json"
-        arr = get_values_as_array
-        File.open("#{filename}", 'w') do |file|
-            file.write(arr.to_json)
+        def save(filename)
+                filename = "#{filename}.json"
+                arr = get_values_as_array
+                File.open("#{filename}", 'w') do |file|
+                        file.write(arr.to_json)
+                end
+                puts "File Saved Successfully as #{filename}"
         end
-        puts "File Saved Successfully as #{filename}"
-    end
 
-    def is_valid_values(values)
-        return false unless values.class == Array
-        values.each do |elem|
-            return false unless elem.class == Integer
+        def has_valid_values(values)
+                return false unless values.is_a? Array
+                values.each do |elem|
+                        return false unless elem.is_a? Integer
+                end
+                true
         end
-        true
-    end
 
-    def load(filename)
-        filename = "#{filename}.json"
-        return puts 'No Such file present.' if !File.exist?(filename)
+        def load(filename)
+                filename = "#{filename}.json"
+                return puts 'No Such file present.' if !File.exist?(filename)
 
-        begin
-            data = File.read(filename)    
-            elements = JSON.parse(data)    
+                data = File.read(filename)        
+                elements = JSON.parse(data)
+                        
+                raise "InValid Values in file."  unless has_valid_values(elements)
+                
+                clear
+                elements.each do |elem|
+                        insert elem
+                end
+                puts 'File Loaded Sucessfully...'
+
         rescue JSON::ParserError => exception
-            return puts "InValid Json File."
+                puts "InValid Json File."
+        rescue RuntimeError => exc
+                puts exc
         end
-        return puts "InValid Values in file." unless is_valid_values(elements)
-        
-        clear
-        elements.each do |elem|
-            insert elem
-        end
-        puts 'File Loaded Sucessfully...'
-    end
 end
