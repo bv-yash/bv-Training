@@ -1,4 +1,4 @@
-require_relative "BST.rb"
+require_relative "BST"
 
 BST_OPERATION = {}
 
@@ -31,10 +31,10 @@ end
 def is_valid_input(elements)
     begin
         elements = elements.map { |elem| Integer(elem) }
+        true
     rescue ArgumentError
         return false
     end
-    true
 end
 
 def run_bst_script(tree, user_input)
@@ -80,7 +80,7 @@ def run_bst_script(tree, user_input)
     when BstOperation::QUIT
         return puts 'Thank You!!!' if tree.empty?
 
-        print 'Please enter file name to save : '       
+        print 'Please enter file name to save : '
         filename = gets.chomp
         tree.save(filename) 
         puts 'Thank You!!!'
