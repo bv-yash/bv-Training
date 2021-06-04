@@ -1,22 +1,21 @@
-require_relative "BSTScript"
-require_relative "LinkedListScript"
+require_relative "./scripts/bst_script"
+require_relative "./scripts/linked_list_script"
 
-DATA_STRUCTURE = Operation.new
+INPUT_OPTIONS = Operation.new
 
-module Data
-        BST = DATA_STRUCTURE.add_operation(1,'Binary Search Tree')
-        LINKED_LIST = DATA_STRUCTURE.add_operation(2,'Linked List')
-        QUIT = DATA_STRUCTURE.add_operation(3,'QUIT')
+module InputOptions
+        BST = INPUT_OPTIONS.add_operation(1,'Binary Search Tree')
+        LINKED_LIST = INPUT_OPTIONS.add_operation(2,'Linked List')
+        QUIT = INPUT_OPTIONS.add_operation(3,'QUIT')
 end
 
 def run_script(user_input)
-
         case user_input
-        when Data::BST
+        when InputOptions::BST
                 main_BST
-        when Data::LINKED_LIST
+        when InputOptions::LINKED_LIST
                 main_LL
-        when Data::QUIT
+        when InputOptions::QUIT
                 puts "Thank You!!"
         else
                 puts "InValid Choice!!!"
@@ -25,12 +24,12 @@ end
 
 def main
         loop do
-                DATA_STRUCTURE.show_available_options
+                INPUT_OPTIONS.show_available_options
                 user_input = gets.chomp
-                user_input = parse_input(user_input, Data::QUIT)
+                user_input = user_input == 'quit' ? 3 : user_input.to_i
 
                 run_script(user_input)
-                break if user_input == Data::QUIT
+                break if user_input == InputOptions::QUIT
         end
 end
 

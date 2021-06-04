@@ -1,58 +1,66 @@
-require_relative 'DataStructure'
+require_relative "./data_structure"
+require_relative "./node"
 
 class ListNode < Node
+        attr_accessor :_next
 
-        attr_accessor :next
-
-        def initialize(value = nil, nxt = nil)
+        def initialize(value = nil, _next = nil)
                 super value
-                @next = nxt
+                @_next = _next
         end
 end
 
 class LinkedList < DataStructures
-
+        
         def initialize
                 @head = nil
                 @tail = nil
         end
 
-        def insert(value)
+        def build(elements)
+                clear
+                elements.each do |elem|
+                        insert_at_end(elem)
+                end
+        end
+
+        def insert_at_end(value)
                 new_node = ListNode.new(value)
                 
                 if @head.nil?
                         @head = new_node
                         @tail = new_node
                 else
-                        @tail.next = new_node
-                        @tail = new_node
+                        @tail._next = new_node
+                        @tail = @tail._next
                 end
         end
         
         def remove(value)
-                return if @head.nil?
+                rreturn if @head.nil?
 
                 if @head.value == value
-                        @head = @head.next
-                        return
+                        @head = @head._next
+                else
+                        prev = nil
+                        curr_node = @head
+                        until curr_node.nil?
+                                if curr_node.value == value
+                                       prev._next = curr_node._next
+                                       @tail = prev if curr_node == @tail
+                                       break
+                                end
+                                prev = curr_node
+                                curr_node = curr_node._next
+                        end
                 end
-
-                prev = nil
-                curr_node = @head
-                while !curr_node.nil? and curr_node.value != value
-                        prev = curr_node
-                        curr_node = curr_node.next
-                end
-                return if curr_node.nil?
-                prev.next = curr_node.next
-                @tail = prev if curr_node == @tail
         end
 
         def search(value)
                 curr_node = @head
                 until curr_node.nil?
                         return true if curr_node.value == value
-                        curr_node = curr_node.next
+                        curr_node = curr_node._next
                 end
                 false
         end
@@ -61,7 +69,7 @@ class LinkedList < DataStructures
                 curr_node = @head
                 until curr_node.nil?
                         print curr_node.value, ' => '
-                        curr_node = curr_node.next
+                        curr_node = curr_node._next
                 end
                 puts 'nil'
         end
@@ -72,8 +80,8 @@ class LinkedList < DataStructures
                 @tail = curr_node
 
                 until curr_node.nil?
-                        nxt = curr_node.next
-                        curr_node.next = prev
+                        nxt = curr_node._next
+                        curr_node._next = prev
                         prev = curr_node
                         curr_node = nxt
                 end
@@ -94,7 +102,7 @@ class LinkedList < DataStructures
                 curr_node = @head
                 until curr_node.nil?
                         arr << curr_node.value
-                        curr_node = curr_node.next
+                        curr_node = curr_node._next
                 end
                 arr
         end

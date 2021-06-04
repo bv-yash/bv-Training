@@ -1,5 +1,6 @@
-require_relative "operations"
-require_relative "BST"
+require_relative "../utility"
+require_relative "../classes/operations"
+require_relative "../classes/binary_search_tree"
 
 BST_OPERATION = Operation.new
 
@@ -17,7 +18,6 @@ module BstOperation
 end
 
 def run_bst_script(tree, user_input)
-        
         ops = [BstOperation::INSERT, BstOperation::LOAD, BstOperation::SAVE, BstOperation::QUIT]
         if tree.empty? and !ops.include?(user_input)
                 puts "Empty Tree" 
@@ -77,7 +77,7 @@ def main_BST
         loop do
                 BST_OPERATION.show_available_options
                 user_input = gets.chomp
-                user_input = parse_input(user_input, BstOperation::QUIT)
+                user_input = user_input == 'quit' ? 10 : user_input.to_i
 
                 run_bst_script(tree, user_input)
                 wait_for_user_input

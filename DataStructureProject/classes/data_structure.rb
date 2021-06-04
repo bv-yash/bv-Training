@@ -1,23 +1,13 @@
 require "json"
 
-class Node
-
-        attr_accessor :value
-
-        def initialize(value = nil)
-                @value = value
-        end
-end
-
 class DataStructures
-
         def save(filename)
-                filename = "#{filename}.json"
+                file_path = "./DataStructureProject/saved_files/#{filename}.json"
                 arr = get_values_as_array
-                File.open("#{filename}", 'w') do |file|
+                File.open("#{file_path}", 'w') do |file|
                         file.write(arr.to_json)
                 end
-                puts "File Saved Successfully as #{filename}"
+                puts "File Saved Successfully."
         end
 
         def has_valid_values(values)
@@ -29,18 +19,19 @@ class DataStructures
         end
 
         def load(filename)
-                filename = "#{filename}.json"
-                return puts 'No Such file present.' if !File.exist?(filename)
+                file_path = "./DataStructureProject/saved_files/#{filename}.json"
+                if !File.exist?(file_path)
+                        puts 'No such file present.' 
+                        return
+                end
 
-                data = File.read(filename)        
+
+                data = File.read(file_path)        
                 elements = JSON.parse(data)
                         
                 raise "InValid Values in file."  unless has_valid_values(elements)
                 
-                clear
-                elements.each do |elem|
-                        insert elem
-                end
+                build elements
                 puts 'File Loaded Sucessfully...'
 
         rescue JSON::ParserError => exception

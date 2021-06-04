@@ -1,20 +1,3 @@
-def wait_for_user_input
-        puts "Press enter to continue." 
-        gets
-        system('clear')
-end
-
-def is_valid_input(elements)
-                elements = elements.map { |elem| Integer(elem) }
-                true
-rescue ArgumentError => exeception
-        return false
-end
-
-def parse_input(user_input, quit_op)
-        (user_input == 'quit') ? quit_op : user_input.to_i 
-end
-
 class Operation
         def initialize
           @options = {}

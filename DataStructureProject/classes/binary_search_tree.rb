@@ -1,7 +1,7 @@
-require_relative "DataStructure"
+require_relative "./data_structure"
+require_relative "./node"
 
 class TreeNode < Node
-
         attr_accessor :left, :right
 
         def initialize(value = nil, left = nil, right = nil)
@@ -12,13 +12,18 @@ class TreeNode < Node
 end
 
 class BinarySearchTree < DataStructures
-
         attr_accessor :root
         
         def initialize
                 @root = nil
         end
 
+        def build(elements)
+                clear
+                elements.each do |elem|
+                        insert(elem)
+                end
+        end
 
         def insert(value)
                 if @root.nil?

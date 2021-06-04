@@ -1,6 +1,16 @@
-This Project consist Data Structure and operations perform on it, implement in ruby
+# This Project consist Binary Search Tree and Linked List Data Structure, implement in ruby
 
-![](images/1.png)
+
+### Steps to run project :
+
+1) Clone this repository
+
+2) Run `ruby ./DataStructureProject/main.rb`
+
+
+### Outputs :
+
+![](images/1.png) 
 
 ![](images/2.png)
 

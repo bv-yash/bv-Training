@@ -1,10 +1,11 @@
-require_relative "operations"
-require_relative "LinkedList"
+require_relative "../utility"
+require_relative "../classes/operations"
+require_relative "../classes/linked_list"
 
 LIST_OPERATION = Operation.new
 
 module ListOperation
-        INSERT = LIST_OPERATION.add_operation(1, 'Add elements into the list(multiple elements comma separated)')
+        INSERT_AT_END = LIST_OPERATION.add_operation(1, 'Add elements into the list(multiple elements comma separated)')
         SEARCH = LIST_OPERATION.add_operation(2, 'Search an element')
         REMOVE = LIST_OPERATION.add_operation(3, 'Remove an element')
         REVERSE = LIST_OPERATION.add_operation(4, 'Reverse the list.')
@@ -15,15 +16,14 @@ module ListOperation
 end
 
 def run_list_script(list, user_input)
-
         case user_input
-        when ListOperation::INSERT
+        when ListOperation::INSERT_AT_END
                 print "Please enter elemets : "
                 elements = gets.chomp.split(',')
                 return puts "Invalid Inputs!!!" unless is_valid_input(elements)
                 
                 elements.each do |elem|
-                        list.insert Integer(elem)
+                        list.insert_at_end Integer(elem)
                 end 
                 puts "Elements inserted successfully."
         when ListOperation::SEARCH
@@ -67,7 +67,7 @@ def main_LL
         loop do
                 LIST_OPERATION.show_available_options
                 user_input = gets.chomp
-                user_input = parse_input(user_input, ListOperation::QUIT)
+                user_input = user_input == 'quit' ? 8 : user_input.to_i
 
                 run_list_script(list, user_input)
                 wait_for_user_input
