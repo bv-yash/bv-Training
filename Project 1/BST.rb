@@ -1,4 +1,4 @@
-load 'Node.rb'
+require_relative "DataStructure"
 
 class TreeNode < Node
 
@@ -11,22 +11,23 @@ class TreeNode < Node
     end
 end
 
+class BinarySearchTree < DataStructures
 
-class BinarySearchTree
+    attr_accessor :root
     
-    def initialize()
+    def initialize
         @root = nil
     end
 
 
     def insert(value)
-        if @root == nil
+        if @root.nil?
             @root = TreeNode.new(value)
         else
             curr_node = @root
             previous_node = @root
 
-            while curr_node != nil
+            until curr_node.nil?
                 previous_node = curr_node
                 if value <= curr_node.value
                     curr_node = curr_node.left
@@ -35,14 +36,13 @@ class BinarySearchTree
                 end
             end
 
-            if value < previous_node.value
+            if value <= previous_node.value
                 previous_node.left = TreeNode.new(value)
             else
                 previous_node.right = TreeNode.new(value)
             end
         end
     end
-
 
     def traverse        
         print "Inorder traversal => "
@@ -62,25 +62,19 @@ class BinarySearchTree
         puts
     end
 
-
     def in_order(root)
         return if root.nil?
             
         in_order(root.left)
-
         print root.value, ' '
-
         in_order(root.right)
     end
-
 
     def post_order(root)
         return if root.nil?
 
         post_order(root.left)
-
         post_order(root.right)
-
         print root.value, ' '
     end
 
@@ -89,22 +83,16 @@ class BinarySearchTree
         return if root.nil?
 
         print root.value, ' '
-
         pre_order(root.left)
-
         pre_order(root.right)
     end
 
-
     def level_order(root)
-        return if root.nil?
+        return [] if root.nil?
         
         result = []
-
         que = Queue.new
-
-        que.push @root
-
+        que.push root
         level = 0
         puts
 
@@ -117,7 +105,6 @@ class BinarySearchTree
                 curr_level << node.value
 
                 que.push(node.left) unless node.left.nil?
-
                 que.push(node.right) unless node.right.nil?
             end
 
@@ -130,35 +117,32 @@ class BinarySearchTree
         result
     end
 
-
-    def find_smallest()
+    def find_smallest
         return if @root.nil?
 
         curr_node = @root
-        while curr_node.left != nil
+        until curr_node.left.nil?
             curr_node = curr_node.left
         end
 
         curr_node.value
     end
 
+    def find_largest(root = @root)
+        return if root.nil?
 
-    def find_largest()
-        return if @root.nil?
-
-        curr_node = @root
-        while curr_node.right != nil
+        curr_node = root
+        until curr_node.right.nil?
             curr_node = curr_node.right
         end
 
         curr_node.value
     end
 
-
     def search(key)
         curr_node = @root
 
-        while curr_node != nil do
+        until curr_node.nil?
             return true if curr_node.value == key 
 
             if curr_node.value < key
@@ -171,53 +155,40 @@ class BinarySearchTree
         false
     end
 
-
     def remove(key)
-        @root = remove_helper(key, @root)
+        @root = remove_helper(@root, key)
     end
 
-
-    def remove_helper(key, node)
+    def remove_helper(node, key)
         return nil if node.nil?
         
         if node.value < key
-
-            node.right = remove_helper(key, node.right)
-
+            node.right = remove_helper(node.right, key)
         elsif node.value > key
-
-            node.left = remove_helper(key, node.left)
-
+            node.left = remove_helper(node.left, key)
         else
-            if node.left.nil? and node.right.nil? #no child
+            if node.left.nil? && node.right.nil? #no child
                 node = nil
-            elsif node.left != nil   # 1 child
-                node = node.left
-            elsif node.right !=  nil # 1 child
+            elsif node.left.nil?   # 1 child
                 node = node.right
+            elsif node.right.nil? # 1 child
+                node = node.left
             else                     # 2 child
-
                 max_in_left_subtree = find_largest(node.left)
-
                 node.value = max_in_left_subtree
-
-                node.right = remove_helper(max_in_left_subtree, node.right)
+                node.left = remove_helper(node.left, max_in_left_subtree)
             end
         end
-
-        return node
+        node
     end
 
-
-    def all_path_from_root_to_leaf()
-        result = []
+    def all_path_from_root_to_leaf
+        result   = []
         curr_path = []
-        
+
         get_paths(@root, curr_path, result)
-        
         print_paths(result)
     end
-
 
     def get_paths(root, cur_path, result)
         return if root.nil?
@@ -228,75 +199,42 @@ class BinarySearchTree
             result << cur_path.clone
         else
             get_paths(root.left, cur_path, result)
-
             get_paths(root.right, cur_path, result)
         end
 
         cur_path.pop
     end
 
-
     def print_paths(paths)
         puts 'Printing All path from root to leaf...'
         paths.each_with_index do |path, idx|
+            path_size = path.length
             print 'Path ', idx+1, ' : '
-            for val in path
-                print val, ' => '
+            for idx in (0..path_size-2)
+                print path[idx], ' => '
             end
-            print 'nil'
-            puts
+            puts path[path_size-1]
         end
     end
 
+    def get_values_as_array
+        print 'Current Tree =>'
+        levels = level_order(@root)
+
+        arr = []
+        levels.each do |level|
+            level.each do |value|
+                arr << value
+            end
+        end
+        arr
+    end
 
     def clear
         @root = nil
     end
 
-
-    def load(filename)
-    
-        begin
-            file = File.open("#{filename}")    
-            data = file.read
-            file.close
-            
-            elements = data.split(',').map { |elem| elem.to_i}
-    
-            clear
-            elements.each do |elem|
-                insert elem
-            end 
-    
-            puts 'File Loaded Sucessfully...'
-
-        rescue 
-
-            puts 'No Such file present.'
-
-        end
-    end
-    
-    def save(filename)
-        
-        print 'Current Tree =>'
-        result = level_order(@root)
-    
-        File.open("#{filename}", 'w') { |file|
-            result.each do |level|
-                level.each do |value|
-                    file << value
-                    file << ','
-                end
-            end
-        }
-    
-        puts "Tree saved as #{name}.txt"
-    end
-
     def empty?
-        return  @root.nil?
+        @root.nil?
     end
-
 end
-
