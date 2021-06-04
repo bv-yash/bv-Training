@@ -92,7 +92,7 @@ class LinkedList < DataStructures
         def get_values_as_array
                 arr = []
                 curr_node = @head
-                while curr_node != nil
+                until curr_node.nil?
                         arr << curr_node.value
                         curr_node = curr_node.next
                 end
