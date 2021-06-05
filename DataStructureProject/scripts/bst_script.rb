@@ -52,7 +52,7 @@ def run_bst_script(tree, user_input)
         when BstOperation::ALL_PATH
                 tree.all_path_from_root_to_leaf
         when BstOperation::LOAD
-                puts 'Expecting a json file and input should be anay.'
+                puts 'Expecting a json file and input should be array.'
                 print 'Please enter file name : '
                 filename = gets.chomp
                 tree.load filename

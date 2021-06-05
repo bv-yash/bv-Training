@@ -42,7 +42,7 @@ def run_list_script(list, user_input)
                 print 'Linked List : '
                 list.print_list
         when ListOperation::LOAD
-                puts 'Expecting a json file and input should be anay.'
+                puts 'Expecting a json file and input should be array.'
                 print 'Please enter file name : '
                 filename = gets.chomp
                 list.load filename
