@@ -25,7 +25,6 @@ class DataStructures
                         return
                 end
 
-
                 data = File.read(file_path)        
                 elements = JSON.parse(data)
                         
